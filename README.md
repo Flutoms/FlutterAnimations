@@ -2,9 +2,9 @@
 
 Repository of Flutter Animations
 
-## Getting Started
+## Checkout the result
 
-This project is a starting point for a Flutter application.
+![](http://www.reactiongifs.us/wp-content/uploads/2013/10/nuh_uh_conan_obrien.gif)
 
 A few resources to get you started if this is your first Flutter project:
 
