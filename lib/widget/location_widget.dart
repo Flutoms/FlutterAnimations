@@ -20,29 +20,26 @@ class LocationWidgetState extends State<LocationWidget> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 500),
-            bottom: isExpanded ? 40 : 100,
-            width: isExpanded ? size.width * 0.78 : size.width * 0.7,
-            height: isExpanded ? size.height * 0.6 : size.height * 0.5,
-            child: const ExpandedContentWidget(),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 500),
+          bottom: isExpanded ? 40 : 100,
+          width: isExpanded ? size.width * 0.78 : size.width * 0.7,
+          height: size.height * 0.65,
+          child: const ExpandedContentWidget(),
+        ),
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 500),
+          bottom: isExpanded ? 175 : 100,
+          child: GestureDetector(
+            onPanUpdate: onPanUpdate,
+            onTap: () {},
+            child: ImageWidget(image: widget.image, imageHeight: imageHeight),
           ),
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 500),
-            bottom: isExpanded ? 160 : 100,
-            child: GestureDetector(
-              onPanUpdate: onPanUpdate,
-              onTap: () {},
-              child: ImageWidget(image: widget.image, imageHeight: imageHeight),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

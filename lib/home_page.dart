@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.black45,
         body: const LocationsWidget(),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
@@ -80,7 +80,6 @@ class _LocationsWidgetState extends State<LocationsWidget> {
           ),
           Text('${pageIndex + 1}/${imageList.length}',
               style: const TextStyle(color: Colors.white70)),
-          const SizedBox(height: 12)
         ],
       );
 }
