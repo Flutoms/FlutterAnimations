@@ -1,23 +1,51 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'widget/location_widget.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int index = 0;
-  late Timer timer;
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Colors.blueGrey,
+        body: const LocationsWidget(),
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          unselectedItemColor: Colors.white54,
+          selectedItemColor: Colors.white,
+          backgroundColor: Colors.transparent,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.pin_drop_outlined), label: ''),
+            BottomNavigationBarItem(icon: Icon(Icons.add_location), label: ''),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline), label: ''),
+          ],
+        ),
+      );
+}
+
+class LocationsWidget extends StatefulWidget {
+  const LocationsWidget({super.key});
+
+  @override
+  State<LocationsWidget> createState() => _LocationsWidgetState();
+}
+
+class _LocationsWidgetState extends State<LocationsWidget> {
+  final pageController = PageController(viewportFraction: 0.8);
+  int pageIndex = 0;
 
   var imageList = [
     'https://images.unsplash.com/photo-1662018107670-78f874d8faf3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc2fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
     'https://images.unsplash.com/photo-1622086674545-1346776dfef5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8d29ya3NwYWNlJTIwc2V0dXB8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1622086674522-79a0089e9d02?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     'https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjF8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     'https://images.unsplash.com/photo-1625655164422-a954607ebca4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTF8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     'https://images.unsplash.com/photo-1601656269222-fda862e6dc7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Njh8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
@@ -39,31 +67,20 @@ class _HomePageState extends State<HomePage> {
   ];
 
   @override
-  void initState() {
-    timer = Timer.periodic((const Duration(seconds: 10)), (value) {
-      setState(() {
-        index == imageList.length - 1 ? index = 0 : index++;
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark),
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 1500),
-              // reverseDuration: const Duration(milliseconds: 500),
-              child: Image.network(imageList[index],
-                  key: Key(index.toString()),
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover)),
-        ));
-  }
+  Widget build(BuildContext context) => Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              controller: pageController,
+              itemCount: imageList.length,
+              itemBuilder: (context, index) =>
+                  LocationWidget(image: imageList[index]),
+              onPageChanged: (index) => setState(() => pageIndex = index),
+            ),
+          ),
+          Text('${pageIndex + 1}/${imageList.length}',
+              style: const TextStyle(color: Colors.white70)),
+          const SizedBox(height: 12)
+        ],
+      );
 }
