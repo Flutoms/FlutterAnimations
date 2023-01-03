@@ -1,6 +1,6 @@
-# flutter_animations
+# Animated Switcher 
 
-Repository of Flutter Animations
+Create a slideshow or screen saver
 
 ## Checkout the result
 
