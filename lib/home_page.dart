@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'home_page_enter_animation.dart';
 
@@ -13,47 +14,52 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: AnimatedBuilder(
-        animation: homePageEnterAnimation.controller,
-        builder: (context, child) => Column(
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark),
+        child: Scaffold(
+          body: AnimatedBuilder(
+            animation: homePageEnterAnimation.controller,
+            builder: (context, child) => Column(
               children: [
-                TopBarWidget(size: homePageEnterAnimation.barHeight.value),
-                ProfileCenter(
-                    size: size,
-                    animationValue: homePageEnterAnimation.avatarSize.value),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    TopBarWidget(size: homePageEnterAnimation.barHeight.value),
+                    ProfileCenter(
+                        size: size,
+                        animationValue:
+                            homePageEnterAnimation.avatarSize.value),
+                  ],
+                ),
+                Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const SizedBox(height: 60),
+                        Opacity(
+                          opacity: homePageEnterAnimation.titleOpacity.value,
+                          child: const PlaceHolder(
+                              alignment: Alignment.centerLeft,
+                              height: 28,
+                              width: 150),
+                        ),
+                        const SizedBox(height: 8),
+                        Opacity(
+                          opacity: homePageEnterAnimation.textOpacity.value,
+                          child: const PlaceHolder(
+                              alignment: Alignment.centerLeft,
+                              height: 350,
+                              width: double.infinity),
+                        )
+                      ],
+                    ))
               ],
             ),
-            Padding(
-                padding: EdgeInsets.all(12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const SizedBox(height: 60),
-                    Opacity(
-                      opacity: homePageEnterAnimation.titleOpacity.value,
-                      child: const PlaceHolder(
-                          alignment: Alignment.centerLeft,
-                          height: 28,
-                          width: 150),
-                    ),
-                    const SizedBox(height: 8),
-                    Opacity(
-                      opacity: homePageEnterAnimation.textOpacity.value,
-                      child: const PlaceHolder(
-                          alignment: Alignment.centerLeft,
-                          height: 350,
-                          width: double.infinity),
-                    )
-                  ],
-                ))
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
@@ -121,7 +127,7 @@ class TopBarWidget extends StatelessWidget {
     return Container(
       height: size,
       width: double.infinity,
-      color: Colors.blue,
+      color: size <= 30 ? Colors.transparent : Colors.blue,
     );
   }
 }
