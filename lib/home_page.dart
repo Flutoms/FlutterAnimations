@@ -1,85 +1,127 @@
 import 'package:flutter/material.dart';
 
-import 'widget/location_widget.dart';
+import 'home_page_enter_animation.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {
+  HomePage({Key? key, required this.animationController})
+      : homePageEnterAnimation = HomePageEnterAnimation(animationController),
+        super(key: key);
+
+  final AnimationController animationController;
+  final HomePageEnterAnimation homePageEnterAnimation;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Colors.black45,
-        body: const LocationsWidget(),
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 0,
-          unselectedItemColor: Colors.white54,
-          selectedItemColor: Colors.white,
-          backgroundColor: Colors.transparent,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.pin_drop_outlined), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.add_location), label: ''),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline), label: ''),
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: AnimatedBuilder(
+        animation: homePageEnterAnimation.controller,
+        builder: (context, child) => Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                TopBarWidget(size: homePageEnterAnimation.barHeight.value),
+                ProfileCenter(
+                    size: size,
+                    animationValue: homePageEnterAnimation.avatarSize.value),
+              ],
+            ),
+            Padding(
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const SizedBox(height: 60),
+                    Opacity(
+                      opacity: homePageEnterAnimation.titleOpacity.value,
+                      child: const PlaceHolder(
+                          alignment: Alignment.centerLeft,
+                          height: 28,
+                          width: 150),
+                    ),
+                    const SizedBox(height: 8),
+                    Opacity(
+                      opacity: homePageEnterAnimation.textOpacity.value,
+                      child: const PlaceHolder(
+                          alignment: Alignment.centerLeft,
+                          height: 350,
+                          width: double.infinity),
+                    )
+                  ],
+                ))
           ],
         ),
-      );
+      ),
+    );
+  }
 }
 
-class LocationsWidget extends StatefulWidget {
-  const LocationsWidget({super.key});
+class PlaceHolder extends StatelessWidget {
+  const PlaceHolder(
+      {Key? key,
+      required this.alignment,
+      required this.height,
+      required this.width})
+      : super(key: key);
+
+  final Alignment alignment;
+  final double height, width;
 
   @override
-  State<LocationsWidget> createState() => _LocationsWidgetState();
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.grey.shade300),
+      ),
+    );
+  }
 }
 
-class _LocationsWidgetState extends State<LocationsWidget> {
-  final pageController = PageController(viewportFraction: 0.8);
-  int pageIndex = 0;
+class ProfileCenter extends StatelessWidget {
+  const ProfileCenter({
+    Key? key,
+    required this.size,
+    required this.animationValue,
+  }) : super(key: key);
 
-  var imageList = [
-    'https://images.unsplash.com/photo-1662018107670-78f874d8faf3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc2fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1622086674545-1346776dfef5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8d29ya3NwYWNlJTIwc2V0dXB8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjF8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1625655164422-a954607ebca4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTF8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1601656269222-fda862e6dc7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Njh8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1595675024853-0f3ec9098ac7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjV8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1642597660567-149d77b4d200?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8ODJ8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1669723008642-b00fa9d10b76?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTh8fHdvcmtzcGFjZSUyMHNldHVwfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1498409570040-05bf6d3dd5b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTMxfHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1628269989095-ef8569497706?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTUwfHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1662018107938-0774bf96ac57?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTY3fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1662018111612-e9ad7ee71562?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTcyfHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1648912795679-a4d06075c860?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc4fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1662019293071-bff94b65d33e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTc3fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1600897330900-6c82b03459e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTkyfHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1608459266648-6f317872e914?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjA3fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1653007717271-49db790effeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjEwfHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1616440537338-1d04df3987f7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjIyfHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1642181839728-26227a5c5905?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjI3fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-    'https://images.unsplash.com/photo-1642181839728-26227a5c5905?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjI3fHx3b3Jrc3BhY2UlMjBzZXR1cHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
-  ];
+  final Size size;
+  final double animationValue;
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: pageController,
-              itemCount: imageList.length,
-              itemBuilder: (context, index) =>
-                  LocationWidget(image: imageList[index]),
-              onPageChanged: (index) => setState(() => pageIndex = index),
-            ),
-          ),
-          Text('${pageIndex + 1}/${imageList.length}',
-              style: const TextStyle(color: Colors.white70)),
-        ],
-      );
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 200,
+        left: (size.width / 2) - 50,
+        child: Transform(
+            alignment: Alignment.center,
+            transform:
+                Matrix4.diagonal3Values(animationValue, animationValue, 1.0),
+            child: Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.blue.shade700),
+            )));
+  }
+}
+
+class TopBarWidget extends StatelessWidget {
+  const TopBarWidget({Key? key, required this.size}) : super(key: key);
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: double.infinity,
+      color: Colors.blue,
+    );
+  }
 }
