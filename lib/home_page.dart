@@ -1,133 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'home_page_enter_animation.dart';
+import 'widgets/image_list.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key, required this.animationController})
-      : homePageEnterAnimation = HomePageEnterAnimation(animationController),
-        super(key: key);
-
-  final AnimationController animationController;
-  final HomePageEnterAnimation homePageEnterAnimation;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark),
-        child: Scaffold(
-          body: AnimatedBuilder(
-            animation: homePageEnterAnimation.controller,
-            builder: (context, child) => Column(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    TopBarWidget(size: homePageEnterAnimation.barHeight.value),
-                    ProfileCenter(
-                        size: size,
-                        animationValue:
-                            homePageEnterAnimation.avatarSize.value),
+    return Scaffold(
+      backgroundColor: const Color(0xff010101),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ShaderMask(
+              blendMode: BlendMode.dstOut,
+              shaderCallback: (rect) {
+                return LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.8),
+                    Colors.black.withOpacity(0.9),
+                    Colors.black,
+                  ],
+                  stops: const [0, 0.62, 0.67, 0.85, 1],
+                ).createShader(rect);
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: const <Widget>[
+                    SizedBox(height: 30),
+                    ImageListView(
+                      startIndex: 1,
+                      duration: 25,
+                    ),
+                    SizedBox(height: 10),
+                    ImageListView(
+                      startIndex: 11,
+                      duration: 45,
+                    ),
+                    SizedBox(height: 10),
+                    ImageListView(
+                      startIndex: 21,
+                      duration: 65,
+                    ),
+                    SizedBox(height: 10),
+                    ImageListView(
+                      startIndex: 31,
+                      duration: 30,
+                    ),
                   ],
                 ),
-                Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const SizedBox(height: 60),
-                        Opacity(
-                          opacity: homePageEnterAnimation.titleOpacity.value,
-                          child: const PlaceHolder(
-                              alignment: Alignment.centerLeft,
-                              height: 28,
-                              width: 150),
-                        ),
-                        const SizedBox(height: 8),
-                        Opacity(
-                          opacity: homePageEnterAnimation.textOpacity.value,
-                          child: const PlaceHolder(
-                              alignment: Alignment.centerLeft,
-                              height: 350,
-                              width: double.infinity),
-                        )
-                      ],
-                    ))
-              ],
+              ),
             ),
           ),
-        ));
-  }
-}
-
-class PlaceHolder extends StatelessWidget {
-  const PlaceHolder(
-      {Key? key,
-      required this.alignment,
-      required this.height,
-      required this.width})
-      : super(key: key);
-
-  final Alignment alignment;
-  final double height, width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.grey.shade300),
-      ),
-    );
-  }
-}
-
-class ProfileCenter extends StatelessWidget {
-  const ProfileCenter({
-    Key? key,
-    required this.size,
-    required this.animationValue,
-  }) : super(key: key);
-
-  final Size size;
-  final double animationValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        top: 200,
-        left: (size.width - 100) / 2,
-        child: Transform(
-            alignment: Alignment.center,
-            transform:
-                Matrix4.diagonal3Values(animationValue, animationValue, 1.0),
+          Positioned(
+            bottom: 60,
+            left: 24,
+            right: 24,
             child: Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.blue.shade700),
-            )));
-  }
-}
-
-class TopBarWidget extends StatelessWidget {
-  const TopBarWidget({Key? key, required this.size}) : super(key: key);
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: size,
-      width: double.infinity,
-      color: size <= 30 ? Colors.transparent : Colors.blue,
+              height: 170,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    'Art with NFTs',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Check out this raffle for you guys only! new coin minted show some love.',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      height: 1.2,
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    width: 140,
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xff3000ff),
+                    ),
+                    child: const Text(
+                      'Discover',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
