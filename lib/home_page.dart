@@ -97,7 +97,7 @@ class ProfileCenter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
         top: 200,
-        left: (size.width / 2) - 50,
+        left: (size.width - 100) / 2,
         child: Transform(
             alignment: Alignment.center,
             transform:
