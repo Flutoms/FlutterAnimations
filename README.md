@@ -1,10 +1,10 @@
-# flutter_animations
+# Animated Switcher
 
-Repository of Flutter Animations
+Create a slideshow or screen saver
 
-## Getting Started
+## Checkout the result
 
-This project is a starting point for a Flutter application.
+![](https://github.com/JAtoms/FlutterAnimations/blob/TransitionAnimation/assets/20230103_232146.gif)
 
 A few resources to get you started if this is your first Flutter project:
 
