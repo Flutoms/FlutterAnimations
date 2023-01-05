@@ -1,4 +1,4 @@
-# Animated Switcher
+# List Auto Scroll
 
 Create a slideshow or screen saver
 
