@@ -1,133 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'home_page_enter_animation.dart';
+import 'animations/animations.dart';
+import 'utils/utils.dart';
+import 'widgets/blur_container.dart';
+import 'widgets/image_list.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key, required this.animationController})
-      : homePageEnterAnimation = HomePageEnterAnimation(animationController),
-        super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-  final AnimationController animationController;
-  final HomePageEnterAnimation homePageEnterAnimation;
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Size size;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) => size = MediaQuery.of(context).size);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark),
-        child: Scaffold(
-          body: AnimatedBuilder(
-            animation: homePageEnterAnimation.controller,
-            builder: (context, child) => Column(
+    return Scaffold(
+      backgroundColor: const Color(0xff010101),
+      body: Stack(
+        children: [
+          Image.network(
+              "https://images.unsplash.com/photo-"
+              "1590503002569-c09d4ddfd698?ixlib=rb-4.0.3&ixid"
+              "=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&"
+              "auto=format&fit=crop&w=1470&q=80",
+              height: (MediaQuery.of(context).size.height / 2) - 30,
+              fit: BoxFit.cover),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    TopBarWidget(size: homePageEnterAnimation.barHeight.value),
-                    ProfileCenter(
-                        size: size,
-                        animationValue:
-                            homePageEnterAnimation.avatarSize.value),
-                  ],
-                ),
+                const ImageListView(startIndex: 1, duration: 25),
                 Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const SizedBox(height: 60),
-                        Opacity(
-                          opacity: homePageEnterAnimation.titleOpacity.value,
-                          child: const PlaceHolder(
-                              alignment: Alignment.centerLeft,
-                              height: 28,
-                              width: 150),
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 30),
+                      Text(
+                        'Find And Collect Your Rare Digital Art',
+                        style: globalTextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 35),
+                      ),
+                      Text(
+                        'Check out this raffle for you guys only! new coin minted show some love.',
+                        style: globalTextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 30),
+                      FadeAnimation(
+                        intervalEnd: 0.1,
+                        child: Container(
+                          width: double.infinity,
+                          height: 60,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 16),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 30),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: const Color(0xff3000ff),
+                          ),
+                          child: Text('Connect Wallet',
+                              style: globalTextStyle(
+                                  fontSize: 14, color: Colors.white)),
                         ),
-                        const SizedBox(height: 8),
-                        Opacity(
-                          opacity: homePageEnterAnimation.textOpacity.value,
-                          child: const PlaceHolder(
-                              alignment: Alignment.centerLeft,
-                              height: 350,
-                              width: double.infinity),
-                        )
-                      ],
-                    ))
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ));
-  }
-}
-
-class PlaceHolder extends StatelessWidget {
-  const PlaceHolder(
-      {Key? key,
-      required this.alignment,
-      required this.height,
-      required this.width})
-      : super(key: key);
-
-  final Alignment alignment;
-  final double height, width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.grey.shade300),
+          )
+        ],
       ),
-    );
-  }
-}
-
-class ProfileCenter extends StatelessWidget {
-  const ProfileCenter({
-    Key? key,
-    required this.size,
-    required this.animationValue,
-  }) : super(key: key);
-
-  final Size size;
-  final double animationValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        top: 200,
-        left: (size.width - 100) / 2,
-        child: Transform(
-            alignment: Alignment.center,
-            transform:
-                Matrix4.diagonal3Values(animationValue, animationValue, 1.0),
-            child: Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.blue.shade700),
-            )));
-  }
-}
-
-class TopBarWidget extends StatelessWidget {
-  const TopBarWidget({Key? key, required this.size}) : super(key: key);
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: size,
-      width: double.infinity,
-      color: size <= 30 ? Colors.transparent : Colors.blue,
     );
   }
 }

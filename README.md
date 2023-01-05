@@ -1,10 +1,10 @@
-# Animated Switcher
+# List Auto Scroll
 
 Create a slideshow or screen saver
 
 ## Checkout the result
 
-![](https://github.com/JAtoms/FlutterAnimations/blob/StaggeredAnimation4/assets/20230104_224812.gif)
+![](https://github.com/JAtoms/FlutterAnimations/blob/FlutterListPageAnims5/assets/20230105_031350.gif)
 
 A few resources to get you started if this is your first Flutter project:
 
