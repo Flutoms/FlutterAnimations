@@ -4,7 +4,7 @@ Create a slideshow or screen saver
 
 ## Checkout the result
 
-![](https://github.com/JAtoms/FlutterAnimations/blob/TransitionAnimation/assets/20230103_232146.gif)
+![](https://github.com/JAtoms/FlutterAnimations/blob/StaggeredAnimation4/assets/20230104_224812.gif)
 
 A few resources to get you started if this is your first Flutter project:
 
