@@ -56,6 +56,7 @@ class NFTScreen extends StatelessWidget {
                 'Monkey #271',
                 style: TextStyle(
                   fontSize: 22,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -106,6 +107,7 @@ class NFTScreen extends StatelessWidget {
                   'Place Bid',
                   style: TextStyle(
                     fontSize: 16,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -135,6 +137,7 @@ class _InfoTile extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 16,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 
+import 'animations/animations.dart';
+import 'utils/utils.dart';
+import 'widgets/blur_container.dart';
 import 'widgets/image_list.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Size size;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) => size = MediaQuery.of(context).size);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,96 +28,63 @@ class HomePage extends StatelessWidget {
       backgroundColor: const Color(0xff010101),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: ShaderMask(
-              blendMode: BlendMode.dstOut,
-              shaderCallback: (rect) {
-                return LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.8),
-                    Colors.black.withOpacity(0.9),
-                    Colors.black,
-                  ],
-                  stops: const [0, 0.62, 0.67, 0.85, 1],
-                ).createShader(rect);
-              },
-              child: SingleChildScrollView(
-                child: Column(
-                  children: const <Widget>[
-                    SizedBox(height: 30),
-                    ImageListView(
-                      startIndex: 1,
-                      duration: 25,
-                    ),
-                    SizedBox(height: 10),
-                    ImageListView(
-                      startIndex: 11,
-                      duration: 45,
-                    ),
-                    SizedBox(height: 10),
-                    ImageListView(
-                      startIndex: 21,
-                      duration: 65,
-                    ),
-                    SizedBox(height: 10),
-                    ImageListView(
-                      startIndex: 31,
-                      duration: 30,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 60,
-            left: 24,
-            right: 24,
-            child: Container(
-              height: 170,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'Art with NFTs',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Check out this raffle for you guys only! new coin minted show some love.',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      height: 1.2,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    width: 140,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xff3000ff),
-                    ),
-                    child: const Text(
-                      'Discover',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+          Image.network(
+              "https://images.unsplash.com/photo-"
+              "1590503002569-c09d4ddfd698?ixlib=rb-4.0.3&ixid"
+              "=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&"
+              "auto=format&fit=crop&w=1470&q=80",
+              height: (MediaQuery.of(context).size.height / 2) - 30,
+              fit: BoxFit.cover),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const ImageListView(startIndex: 1, duration: 25),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 30),
+                      Text(
+                        'Find And Collect Your Rare Digital Art',
+                        style: globalTextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 35),
                       ),
-                    ),
+                      Text(
+                        'Check out this raffle for you guys only! new coin minted show some love.',
+                        style: globalTextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 30),
+                      FadeAnimation(
+                        intervalEnd: 0.1,
+                        child: Container(
+                          width: double.infinity,
+                          height: 60,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 16),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 30),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: const Color(0xff3000ff),
+                          ),
+                          child: Text('Connect Wallet',
+                              style: globalTextStyle(
+                                  fontSize: 14, color: Colors.white)),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
+          )
         ],
       ),
     );
