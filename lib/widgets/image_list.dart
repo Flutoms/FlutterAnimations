@@ -75,12 +75,11 @@ class ImageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (isClickable) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => NFTScreen(image: image)),
-          );
-        }
+        if (isClickable) {}
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => NFTScreen(image: image)),
+        );
       },
       child: Hero(
         tag: image,
